@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Temperature Converter</title>
+    <title>Calculatrice</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
 <div>
 
-    <h1>Temperature Converter</h1>
+    <h1>Calculatrice</h1>
 
     <div th:switch="${error}">
-        <p th:case="'FahrenheitFormatError'">
-            Wrong value provided for Fahrenheit - must be a number
+        <p th:case="'InputFormatError'">
+            Wrong input - both inputs must be numbers
         </p>
 
-        <p th:case="'CelsiusFormatError'">
-            Wrong value provided for Celsius - must be a number
+        <p th:case="'DivisionByZeroError'">
+            Cannot divide by zero
         </p>
 
         <p th:case="'OperationFormatError'">
@@ -29,48 +29,68 @@
 
             <tr>
                 <td>
-                    <label for="celsius">Celsius:</label>
+                    <label for="input1">Input 1:</label>
                 </td>
                 <td>
-                    <input name="celsius"
-                           id="celsius"
-                           th:name="celsius"
-                           th:value="${celsius}">
+                    <input name="input1"
+                           id="input1"
+                           th:name="input1"
+                           th:value="${input1}">
                 </td>
             </tr>
 
             <tr>
                 <td>
-                    <label for="fahrenheit">Fahrenheit:</label>
+                    <label for="input2">Input 2:</label>
                 </td>
                 <td>
-                    <input name="fahrenheit"
-                           id="fahrenheit"
-                           th:name="fahrenheit"
-                           th:value="${fahrenheit}">
+                    <input name="input2"
+                           id="input2"
+                           th:name="input2"
+                           th:value="${input2}">
                 </td>
             </tr>
 
             <tr>
                 <td>
                     <button type="submit"
-                            th:name="operation"
-                            th:value="CtoF">
-                        Celsius to Fahrenheit
+                            name="operation"
+                            value="+">
+                        +
                     </button>
                 </td>
 
                 <td>
                     <button type="submit"
-                            th:name="operation"
-                            th:value="FtoC">
-                        Fahrenheit to Celsius
+                            name="operation"
+                            value="-">
+                        -
+                    </button>
+                </td>
+
+                <td>
+                    <button type="submit"
+                            name="operation"
+                            value="*">
+                        *
+                    </button>
+                </td>
+
+                <td>
+                    <button type="submit"
+                            name="operation"
+                            value="/">
+                        /
                     </button>
                 </td>
             </tr>
 
         </table>
     </form>
+
+    <p class="result">
+        Result: <span th:text="${result}"></span>
+    </p>
 
 </div>
 </body>

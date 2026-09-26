@@ -21,15 +21,62 @@ class WebControllerTest {
     }
 
     @Test
-    fun celsius_to_fahrenheit_conversion() {
+    fun addition() {
         mockMvc.perform(
             MockMvcRequestBuilders.get("/convert")
-                .param("celsius", "0")
-                .param("fahrenheit", "")
-                .param("operation", "CtoF")
+                .param("input1", "5")
+                .param("input2", "3")
+                .param("operation", "+")
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.model().attribute("fahrenheit", "32.00"))
+            .andExpect(MockMvcResultMatchers.model().attribute("result", 8.0))
             .andExpect(MockMvcResultMatchers.view().name("home"))
+    }
+
+    @Test
+    fun subtraction() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/convert")
+                .param("input1", "5")
+                .param("input2", "3")
+                .param("operation", "-")
+        )
+            .andExpect(MockMvcResultMatchers.model().attribute("result", 2.0))
+    }
+
+    @Test
+    fun multiplication() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/convert")
+                .param("input1", "5")
+                .param("input2", "3")
+                .param("operation", "*")
+        )
+            .andExpect(MockMvcResultMatchers.model().attribute("result", 15.0))
+    }
+
+    @Test
+    fun division() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/convert")
+                .param("input1", "5")
+                .param("input2", "2")
+                .param("operation", "/")
+        )
+            .andExpect(MockMvcResultMatchers.model().attribute("result", 2.5))
+    }
+
+    @Test
+    fun division_by_zero() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/convert")
+                .param("input1", "5")
+                .param("input2", "0")
+                .param("operation", "/")
+        )
+            .andExpect(
+                MockMvcResultMatchers.model()
+                    .attribute("error", "DivisionByZeroError")
+            )
     }
 }

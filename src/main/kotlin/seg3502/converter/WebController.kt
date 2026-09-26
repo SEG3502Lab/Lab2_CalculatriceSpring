@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.util.Locale
 
 @Controller
 class WebController {
@@ -14,8 +13,9 @@ class WebController {
     @ModelAttribute
     fun addAttributes(model: Model) {
         model.addAttribute("error", "")
-        model.addAttribute("celsius", "")
-        model.addAttribute("fahrenheit", "")
+        model.addAttribute("input1", "")
+        model.addAttribute("input2", "")
+        model.addAttribute("result", "")
     }
 
     @RequestMapping("/")
@@ -25,55 +25,92 @@ class WebController {
 
     @GetMapping(value = ["/convert"])
     fun doConvert(
-        @RequestParam(value = "celsius", required = false) celsius: String,
-        @RequestParam(value = "fahrenheit", required = false) fahrenheit: String,
+        @RequestParam(value = "input1", required = false) input1: String,
+        @RequestParam(value = "input2", required = false) input2: String,
         @RequestParam(value = "operation", required = false) operation: String,
         model: Model
     ): String {
 
-        var celsiusVal: Double
-        var fahrenheitVal: Double
+        var input1Val: Double
+        var input2Val: Double
 
         when (operation) {
 
-            "CtoF" ->
+            "+" ->
                 try {
-                    celsiusVal = celsius.toDouble()
-                    fahrenheitVal = ((celsiusVal * 9) / 5 + 32)
+                    input1Val = input1.toDouble()
+                    input2Val = input2.toDouble()
 
-                    model.addAttribute("celsius", celsius)
-                    model.addAttribute(
-                        "fahrenheit",
-                        String.format(Locale.US, "%.2f", fahrenheitVal)
-                    )
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", input1Val + input2Val)
 
                 } catch (exp: NumberFormatException) {
-                    model.addAttribute("error", "CelsiusFormatError")
-                    model.addAttribute("celsius", celsius)
-                    model.addAttribute("fahrenheit", fahrenheit)
+                    model.addAttribute("error", "InputFormatError")
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", "")
                 }
 
-            "FtoC" ->
+            "-" ->
                 try {
-                    fahrenheitVal = fahrenheit.toDouble()
-                    celsiusVal = ((fahrenheitVal - 32) * 5) / 9
+                    input1Val = input1.toDouble()
+                    input2Val = input2.toDouble()
 
-                    model.addAttribute(
-                        "celsius",
-                        String.format(Locale.US, "%.2f", celsiusVal)
-                    )
-                    model.addAttribute("fahrenheit", fahrenheit)
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", input1Val - input2Val)
 
                 } catch (exp: NumberFormatException) {
-                    model.addAttribute("error", "FahrenheitFormatError")
-                    model.addAttribute("celsius", celsius)
-                    model.addAttribute("fahrenheit", fahrenheit)
+                    model.addAttribute("error", "InputFormatError")
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", "")
+                }
+
+            "*" ->
+                try {
+                    input1Val = input1.toDouble()
+                    input2Val = input2.toDouble()
+
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", input1Val * input2Val)
+
+                } catch (exp: NumberFormatException) {
+                    model.addAttribute("error", "InputFormatError")
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", "")
+                }
+
+            "/" ->
+                try {
+                    input1Val = input1.toDouble()
+                    input2Val = input2.toDouble()
+
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+
+                    if (input2Val == 0.0) {
+                        model.addAttribute("error", "DivisionByZeroError")
+                        model.addAttribute("result", "")
+                    } else {
+                        model.addAttribute("result", input1Val / input2Val)
+                    }
+
+                } catch (exp: NumberFormatException) {
+                    model.addAttribute("error", "InputFormatError")
+                    model.addAttribute("input1", input1)
+                    model.addAttribute("input2", input2)
+                    model.addAttribute("result", "")
                 }
 
             else -> {
                 model.addAttribute("error", "OperationFormatError")
-                model.addAttribute("celsius", celsius)
-                model.addAttribute("fahrenheit", fahrenheit)
+                model.addAttribute("input1", input1)
+                model.addAttribute("input2", input2)
+                model.addAttribute("result", "")
             }
         }
 
