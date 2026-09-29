@@ -79,4 +79,15 @@ class WebControllerTest {
                     .attribute("error", "DivisionByZeroError")
             )
     }
+
+    @Test
+    fun invalid_input() {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/convert")
+                .param("input1", "abc")
+                .param("input2", "3")
+                .param("operation", "+")
+        )
+            .andExpect(MockMvcResultMatchers.model().attribute("error", "InputFormatError"))
+    }
 }

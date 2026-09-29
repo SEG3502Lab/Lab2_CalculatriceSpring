@@ -25,9 +25,9 @@ class WebController {
 
     @GetMapping(value = ["/convert"])
     fun doConvert(
-        @RequestParam(value = "input1", required = false) input1: String,
-        @RequestParam(value = "input2", required = false) input2: String,
-        @RequestParam(value = "operation", required = false) operation: String,
+        @RequestParam(value = "input1", defaultValue = "") input1: String,
+        @RequestParam(value = "input2", defaultValue = "") input2: String,
+        @RequestParam(value = "operation", defaultValue = "") operation: String,
         model: Model
     ): String {
 
